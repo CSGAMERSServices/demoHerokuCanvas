@@ -17,6 +17,10 @@ app.get('/callback', function(request, response) {
   response.render('pages/callback');
 });
 
+app.get('/canvas', function(request, response) {
+  response.render('pages/callback');
+});
+
 app.listen(app.get('port'), function() {
   console.log('Node app is running on port', app.get('port'));
 });
