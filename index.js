@@ -1,3 +1,7 @@
+var bodyParser = require('body-parser');
+var path = require('path');
+var CryptoJS = require( 'crypto-js' );
+
 var express = require('express');
 var app = express();
 
@@ -13,8 +17,30 @@ app.get('/', function(request, response) {
   response.render('pages/index');
 });
 
-app.get('/callback', function(request, response) {
-  response.render('pages/callback');
+app.get('/callback', function(req, resp) {
+	console.log( 'consumerKey:' + process.env.CONSUMER_KEY );
+	console.log( 'consumerSecret:' + process.env.CONSUMER_SECRET );
+	
+	var consumerKey = process.env.CONSUMER_KEY;
+	var consumerSecret = process.env.CONSUMER_SECRET;
+	
+	var signedRequest = 'cuca.cuca';
+	if( req.body && req.body.signed_request ){
+		signedRequest = req.body.signed_request;
+	}
+	console.log( 'signedRequest:' + signedRequest );
+	/*
+	var hashedContext = signedRequest.split( '.' )[0];
+	var context = signedRequest.split( '.' )[1];
+	
+	var hash = CryptoJS.HmacSHA256( context, shared );
+	var b64Hash = CrytpoJS.enc.Base64.stringify( hash );
+	
+	console.log( 'what I am expecting:' + b64Hash );
+	console.log( 'what I got:' + hashedContext );
+	*/
+	
+	resp.render('pages/callback');
 });
 
 app.get('/canvas', function(request, response) {
