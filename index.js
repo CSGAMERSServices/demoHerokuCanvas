@@ -38,6 +38,8 @@ function checkSignedRequest( req, resp ){
 	
 	console.log( 'req.body check:' + (typeof req.body) );
 	
+	prettyTrace( req.params, 'req.params' );
+	prettyTrace( req.query, 'req.query' );
 	prettyTrace( req.headers, 'req.headers' );
 	prettyTrace( req.body, 'req.body' );
 	prettyTrace( process.env, 'process.env' );
