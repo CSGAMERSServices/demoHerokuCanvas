@@ -24,6 +24,16 @@ function checkSignedRequest( req, resp ){
 	var consumerKey = process.env.CONSUMER_KEY;
 	var consumerSecret = process.env.CONSUMER_SECRET;
 	
+	if( !req.body ){
+		console.log( 'req.body was not found' );
+	} else {
+		console.log( 'all fields in req.body' );
+		for( var key in req.body ){
+			console.log( 'req.body[' + key + '](' + (typeof req.body[key] ) + ')=' + req.body[key] );
+		}
+		console.log( 'done looking through all fields in req.body' );
+	}
+	
 	var signedRequest = 'cuca.cuca';
 	if( req.body && req.body.signed_request ){
 		signedRequest = req.body.signed_request;
