@@ -78,6 +78,12 @@ app.get('/canvas', function(req, resp) {
 	resp.render('pages/canvas');
 });
 
+app.post('/canvas', function( req, resp ){
+	checkSignedRequest( req, resp );
+	
+	resp.render('pages/canvas');
+});
+
 app.listen(app.get('port'), function() {
   console.log('Node app is running on port', app.get('port'));
 });
