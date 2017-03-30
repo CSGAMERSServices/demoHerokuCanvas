@@ -17,7 +17,7 @@ app.get('/', function(request, response) {
   response.render('pages/index');
 });
 
-app.get('/callback', function(req, resp) {
+function checkSignedRequest( req, resp ){
 	console.log( 'consumerKey:' + process.env.CONSUMER_KEY );
 	console.log( 'consumerSecret:' + process.env.CONSUMER_SECRET );
 	
@@ -40,11 +40,19 @@ app.get('/callback', function(req, resp) {
 	console.log( 'what I got:' + hashedContext );
 	*/
 	
+	return( true );
+}
+
+app.get('/callback', function(req, resp) {
+	checkSignedRequest( req, resp );
+	
 	resp.render('pages/callback');
 });
 
 app.get('/canvas', function(request, response) {
-  response.render('pages/callback');
+	checkSignedRequest( req, resp );
+	
+	response.render('pages/canvas');
 });
 
 app.listen(app.get('port'), function() {
