@@ -36,6 +36,8 @@ function checkSignedRequest( req, resp ){
 	var consumerKey = process.env.CONSUMER_KEY;
 	var consumerSecret = process.env.CONSUMER_SECRET;
 	
+	console.log( 'req.body check:' + (typeof req.body) );
+	
 	prettyTrace( req.headers, 'req.headers' );
 	prettyTrace( req.body, 'req.body' );
 	prettyTrace( process.env, 'process.env' );
