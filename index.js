@@ -2,8 +2,14 @@ var bodyParser = require('body-parser');
 var path = require('path');
 var CryptoJS = require( 'crypto-js' );
 
+var multer = require('multer');
+var upload = multer();
+
 var express = require('express');
 var app = express();
+
+app.use( bodyParser.json() );
+app.use( bodyParser.urlencoded({ extended: true }));
 
 app.set('port', (process.env.PORT || 5000));
 
