@@ -13,8 +13,8 @@ app.use(express.static(__dirname + '/public'));
 app.set('views', __dirname + '/views');
 app.set('view engine', 'ejs');
 
-app.get('/', function(request, response) {
-  response.render('pages/index');
+app.get('/', function(req, resp) {
+  resp.render('pages/index');
 });
 
 function checkSignedRequest( req, resp ){
@@ -52,7 +52,7 @@ app.get('/callback', function(req, resp) {
 app.get('/canvas', function(req, resp) {
 	checkSignedRequest( req, resp );
 	
-	response.render('pages/canvas');
+	resp.render('pages/canvas');
 });
 
 app.listen(app.get('port'), function() {
