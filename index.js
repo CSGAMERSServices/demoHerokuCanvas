@@ -17,6 +17,18 @@ app.get('/', function(req, resp) {
   resp.render('pages/index');
 });
 
+function prettyTrace( obj, message ){
+	if( obj ){
+		console.log( 'starting review of:' + message );
+		for( var key in obj ){
+			console.log( message + '[' + key + ']:' + (typeof obj[key] ) + '=' + obj[key] );
+		}
+		console.log( 'ending review of:' + message );
+	} else {
+		console.log( 'obj: ' + message + ' - was not sent' );
+	}
+}
+
 function checkSignedRequest( req, resp ){
 	console.log( 'consumerKey:' + process.env.CONSUMER_KEY );
 	console.log( 'consumerSecret:' + process.env.CONSUMER_SECRET );
@@ -24,15 +36,9 @@ function checkSignedRequest( req, resp ){
 	var consumerKey = process.env.CONSUMER_KEY;
 	var consumerSecret = process.env.CONSUMER_SECRET;
 	
-	if( !req.body ){
-		console.log( 'req.body was not found' );
-	} else {
-		console.log( 'all fields in req.body' );
-		for( var key in req.body ){
-			console.log( 'req.body[' + key + '](' + (typeof req.body[key] ) + ')=' + req.body[key] );
-		}
-		console.log( 'done looking through all fields in req.body' );
-	}
+	prettyTrace( req.headers, 'req.headers' );
+	prettyTrace( req.body, 'req.body' );
+	prettyTrace( process.env, 'process.env' );
 	
 	var signedRequest = req.get( 'signed_request' );
 	console.log( 'req.get:' + signedRequest );
