@@ -34,7 +34,10 @@ function checkSignedRequest( req, resp ){
 		console.log( 'done looking through all fields in req.body' );
 	}
 	
-	var signedRequest = 'cuca.cuca';
+	var signedRequest = req.get( 'signed_request' );
+	console.log( 'req.get:' + signedRequest );
+	
+	signedRequest = 'cuca.cuca';
 	if( req.body && req.body.signed_request ){
 		signedRequest = req.body.signed_request;
 	}
