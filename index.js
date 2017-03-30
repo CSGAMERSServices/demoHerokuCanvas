@@ -30,12 +30,10 @@ function prettyTrace( obj, message ){
 }
 
 function checkSignedRequest( req, resp ){
-	console.log( 'consumerKey:' + process.env.CONSUMER_KEY );
-	console.log( 'consumerSecret:' + process.env.CONSUMER_SECRET );
-	
 	var consumerKey = process.env.CONSUMER_KEY;
 	var consumerSecret = process.env.CONSUMER_SECRET;
 	
+	//-- why are we not getting anything in body
 	console.log( 'req.body check:' + (typeof req.body) );
 	
 	prettyTrace( req.params, 'req.params' );
@@ -74,12 +72,16 @@ app.get('/callback', function(req, resp) {
 
 app.get('/canvas', function(req, resp) {
 	checkSignedRequest( req, resp );
+	prettyTrace( req.body, 'req.body' );
 	
 	resp.render('pages/canvas');
 });
 
 app.post('/canvas', function( req, resp ){
-	checkSignedRequest( req, resp );
+	
+	console.log( 'request.body:' + (typeof req.body) );
+	
+	//checkSignedRequest( req, resp );
 	
 	resp.render('pages/canvas');
 });
