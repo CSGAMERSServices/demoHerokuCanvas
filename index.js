@@ -85,9 +85,7 @@ app.get('/canvas', function(req, resp) {
 
 app.post('/canvas', function( req, resp ){
 	
-	console.log( 'request.body:' + (typeof req.body) );
-	
-	//checkSignedRequest( req, resp );
+	checkSignedRequest( req, resp );
 	
 	resp.render('pages/canvas');
 });
