@@ -49,7 +49,7 @@ app.get('/callback', function(req, resp) {
 	resp.render('pages/callback');
 });
 
-app.get('/canvas', function(request, response) {
+app.get('/canvas', function(req, resp) {
 	checkSignedRequest( req, resp );
 	
 	response.render('pages/canvas');
