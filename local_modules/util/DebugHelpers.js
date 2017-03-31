@@ -20,6 +20,19 @@ function prettyTrace( obj, message ){
 	}
 }
 
+/**
+ * Dumps everything from a request
+ * @param req (Request)
+ **/
+function dumpRequest( req ){
+	prettyTrace( req.params, 'req.params' );
+	prettyTrace( req.query, 'req.query' );
+	prettyTrace( req.headers, 'req.headers' );
+	prettyTrace( req.body, 'req.body' );
+	prettyTrace( process.env, 'process.env' );
+}
+
 module.exports = {
-	prettyTrace : prettyTrace
+	prettyTrace: prettyTrace,
+	dumpRequest: dumpRequest
 };
