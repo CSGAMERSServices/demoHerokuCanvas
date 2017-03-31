@@ -30,12 +30,18 @@ app.get('/', function(req, resp) {
   resp.render('pages/index');
 });
 
-function checkSignedRequest2( req, resp ){
+function checkForSignedRequest( req, resp ){
 	var signedRequest = 'cuca.monga';
 	if( req.body && req.body.signed_request ){
 		signedRequest = req.body.signed_request;
 	}
 	var secret = process.env.CONSUMER_SECRET;
+	
+	if( !canvasHelpers.checkSignedRequest( signedRequest, secret )){
+		resp.render( 'pages/error', {
+			errMsg: 'not a valid signed request'
+		});
+	}
 	return( canvasHelpers.checkSignedRequest( signedRequest, secret ));
 }
 
@@ -47,23 +53,31 @@ function checkAllParams( req, resp ){
 	debugHelpers.prettyTrace( process.env, 'process.env' );
 }
 
-app.get('/callback', function(req, resp) {
-	checkSignedRequest2( req, resp );
+/**
+ *  Handles if the callback page is requested
+ *  @param req (request)
+ *  @param resp (response)
+**/
+function handleCallback( req, resp ){
+	if( !checkForSignedRequest( req, resp )) return;
 	
 	resp.render('pages/callback');
-});
+}
 
-app.get('/canvas', function(req, resp) {
-	checkSignedRequest2( req, resp );
+/**
+ *  Handles if the callback page is requested
+ *  @param req (request)
+ *  @param resp (response)
+**/
+function handleCanvasRequest( req, resp ){
+	if( !checkForSignedRequest( req, resp )) return;
 	
 	resp.render('pages/canvas');
-});
+}
 
-app.post('/canvas', function( req, resp ){
-	checkSignedRequest2( req, resp );
-	
-	resp.render('pages/canvas');
-});
+app.get('/callback', handleCallback );
+app.get('/canvas', handleCanvasRequest );
+app.post('/canvas', handleCanvasRequest);
 
 app.listen(app.get('port'), function() {
 	console.log('Node app is running on port', app.get('port'));
