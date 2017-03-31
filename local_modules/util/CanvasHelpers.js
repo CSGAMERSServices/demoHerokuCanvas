@@ -63,5 +63,6 @@ function getUserInfo( signedRequest, sharedSecret ){
 }
 
 module.exports = {
-	checkSignedRequest: checkSignedRequest
+	checkSignedRequest: checkSignedRequest,
+	getUserInfo: getUserInfo
 };
