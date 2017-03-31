@@ -1,34 +1,42 @@
-# node-js-getting-started
+# Overview
 
-A barebones Node.js app using [Express 4](http://expressjs.com/).
+Heroku app to handle long running request: importing ticket audits.
 
-This application supports the [Getting Started with Node on Heroku](https://devcenter.heroku.com/articles/getting-started-with-nodejs) article - check it out.
+Please see [https://rally1.rallydev.com/#/58107682671d/detail/userstory/61061019169](US258) for more information.
 
-## Running Locally
 
-Make sure you have [Node.js](http://nodejs.org/) and the [Heroku Toolbelt](https://toolbelt.heroku.com/) installed.
 
-```sh
-$ git clone git@github.com:heroku/node-js-getting-started.git # or clone your own fork
-$ cd node-js-getting-started
-$ npm install
-$ npm start
-```
+# Running the app:
 
-Your app should now be running on [localhost:5000](http://localhost:5000/).
+### Locally:
+Run the following command locally and open your browser to [http://localhost:5000/canvas](http://localhost:5000/canvas)
 
-## Deploying to Heroku
+	. setupConfigVars.sh
+	
+then run the following:
 
-```
-$ heroku create
-$ git push heroku master
-$ heroku open
-```
-or
+	heroku local web
+	
+To run the worker
 
-[![Deploy to Heroku](https://www.herokucdn.com/deploy/button.png)](https://heroku.com/deploy)
+	heroku local worker
+	
 
-## Documentation
+### Heroku:
+
+[https://ticket-scale-import.herokuapp.com/canvas](https://ticket-scale-import.herokuapp.com/canvas)
+
+### Visualforce (using signed request)
+
+[https://lne--dev0--c.cs2.visual.force.com/apex/TEST_TicketScaleImport](https://lne--dev0--c.cs2.visual.force.com/apex/TEST_TicketScaleImport)
+
+### Connected App
+
+[https://lne--dev0.cs2.my.salesforce.com/app/mgmt/forceconnectedapps/forceAppDetail.apexp?applicationId=06PR00000008RAl&notify=true&id=0CiR00000004Krr](Connected App 1)
+[https://lne--dev0.cs2.my.salesforce.com/_ui/core/application/force/connectedapp/ForceConnectedApplicationPage/d?applicationId=06PR00000008RAl](Connected App 2)
+
+
+# Common Links
 
 For more information about using Node.js on Heroku, see these Dev Center articles:
 
