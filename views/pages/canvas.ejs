@@ -7,13 +7,55 @@
 
 <body>
 
+<script type='text/javascript'>
+	function loginHandler( e ){
+		if( !Sfdc.canvas.oauth.loggedin() ){
+			var uri= Sfdc.canvas.loginUrl();
+			Sfdc.canvas.oauth.login({
+				uri: uri,
+				params: {
+					"response_type": "token",
+					"client_id": "<%= CLIENT_ID %>",
+					"redirect_uri": encodeURIComponent(
+						"https://ticket-scale-import.herokuapp.com/callback"
+					)
+				}
+			});
+		} else {
+			Sfdc.canvas.oauth.logout();
+			Sfdc.canvas.byId( 'loginBtn' ).innerHTML = 'Login';
+		}
+	}
+	
+	Sfdc.canvas( function(){
+		var loggedIn = Sfdc.canvas.oauth.loggedin();
+		var token = Sfdc.canvas.oauth.token();
+		var loginBtn	= Sfdc.canvas.byId( 'loginBtn' );
+		var msgIn		= Sfdc.canvas.byId( 'msgIn' );
+		
+		debugger;
+		
+		if( loggedIn ){
+			msgIn.set( "value", "currently logged in" );
+			loginBtn.innerHTML = 'Logout';
+		}
+		login.onclick = loginHandler;
+	});
+</script>
+
+<!--
+taken from
+https://developer.salesforce.com/docs/atlas.en-us.platform_connect.meta/platform_connect/canvas_app_oauth_code_example.htm
+-->
+
 <div class='rome-lds'>
 	<h1>This is an example callback page</h1>
 	<div class="slds-form-element">
 		<label class="slds-form-element__label" for="text-input-01">Input Label</label>
 		<div class="slds-form-element__control">
-			<input type="text" id="text-input-01" class="slds-input" placeholder="Placeholder Text" />
+			<input type="text" id="msgIn" class="slds-input" placeholder="Message goes here" />
 		</div>
+		<button id='loginBtn' type='button' class='slds-button slds-button--brand'>Login</button>
 	</div>
 </div>
 

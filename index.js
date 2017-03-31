@@ -1,3 +1,12 @@
+//-- to test it locally:
+//heroku local web - but use the signed request from restlet
+
+//-- to test in heroku
+//https://ticket-scale-import.herokuapp.com/canvas -- but used the signed request from restlet
+
+//-- to test within visualforce
+//https://lne--dev0--c.cs2.visual.force.com/apex/TEST_TicketScaleImport
+
 var bodyParser = require('body-parser');
 var path = require('path');
 
