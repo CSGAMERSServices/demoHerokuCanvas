@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Example connect page</title>
+	<% include ../partials/lightningHeaders.ejs %>
+</head>
+
+<body>
+
+<script type='text/javascript'>
+	Sfdc.canvas( function(){
+		console.log( 'page loaded' );
+	});
+</script>
+
+<div class='rome-lds'>
+	<form method='post' action='/canvas' enctype='text/plain'>
+		<div class="slds-form-element">
+			<label class="slds-form-element__label" for="accessTokenIn">Access Token</label>
+			<div class="slds-form-element__control">
+				<!-- way to send json in post message body 
+					<input type="hidden" id="accessTokenIn" class="slds-input" name='{"signed_request":"<%- SIGNED_REQUEST %>", "trash":"' value='"}' />
+				-->
+				<input type="hidden" id="accessTokenIn" class="slds-input" name='signed_request' value='<%- SIGNED_REQUEST %>' />
+			</div>
+			<button id='actionBtn' type='submit' class='slds-button slds-button--brand'>Go</button>
+		</div>
+	</form>
+</div>
+
+
+</body>
+</html>
