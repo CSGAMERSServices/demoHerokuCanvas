@@ -8,12 +8,22 @@
 <body>
 
 <script type='text/javascript'>
+	
+	jsf = null;
+	
 	Sfdc.canvas( function(){
 		var loggedIn = Sfdc.canvas.oauth.loggedin();
 		var token = "<%= TOKEN %>";
 		var msgIn = Sfdc.canvas.byId( "msgIn" );
+		var userInfo = JSON.parse( "<%= JSON.stringify( USER_INFO ) %>" );
 		
 		debugger;
+
+		jsf = new jsforce.Connection({
+			sessionId: "<%= TOKEN %>",
+			serverUrl: "<%= INSTANCE_URL %>"
+		});
+		
 		msgIn.setAttribute( "value", token );
 	});
 </script>
