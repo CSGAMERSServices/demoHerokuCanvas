@@ -15,7 +15,7 @@
 		var loggedIn = Sfdc.canvas.oauth.loggedin();
 		var token = "<%= TOKEN %>";
 		var msgIn = Sfdc.canvas.byId( "msgIn" );
-		var userInfo = JSON.parse( "<%- JSON.stringify( USER_INFO ) %>" );
+		var userInfo = <%- JSON.stringify( USER_INFO ) %>;
 		
 		debugger;
 
