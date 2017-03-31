@@ -26,7 +26,7 @@ function checkSignedRequest( signedRequest, sharedSecret ){
 		var hash = CryptoJS.HmacSHA256( context, sharedSecret );
 		var b64Hash = CryptoJS.enc.Base64.stringify( hash );
 		
-		var words = CryptoJS.enc.Base64.parse(base64);
+		var words = CryptoJS.enc.Base64.parse(context);
 		var textString = CryptoJS.enc.Utf8.stringify(words);
 		console.log( 'context String:' ); console.log( textString );
 		
