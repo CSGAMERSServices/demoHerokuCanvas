@@ -10,7 +10,7 @@
 <script type='text/javascript'>
 	function loginHandler( e ){
 		if( !Sfdc.canvas.oauth.loggedin() ){
-			var uri= Sfdc.canvas.loginUrl();
+			var uri= Sfdc.canvas.oauth.loginUrl();
 			Sfdc.canvas.oauth.login({
 				uri: uri,
 				params: {
@@ -39,7 +39,7 @@
 			msgIn.set( "value", "currently logged in" );
 			loginBtn.innerHTML = 'Logout';
 		}
-		login.onclick = loginHandler;
+		loginBtn.onclick = loginHandler;
 	});
 </script>
 
