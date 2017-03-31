@@ -1,65 +1,45 @@
-//-- to test it locally:
-//heroku local web - but use the signed request from restlet
-
-//-- to test in heroku
-//https://ticket-scale-import.herokuapp.com/canvas -- but used the signed request from restlet
-
-//-- to test within visualforce
-//https://lne--dev0--c.cs2.visual.force.com/apex/TEST_TicketScaleImport
-
+//-- used to access canvas multi-part body signatures
 var bodyParser = require('body-parser');
-var path = require('path');
-
 var multer = require('multer');
 var upload = multer();
 
+//-- used to determine files / paths
+var path = require('path');
+
+//-- express
 var express = require('express');
 var app = express();
 
+//-- used to specify config variables
 var config = require( 'config' );
 
-//-- run node-inspector in a separate browser window
-//-- then run heroku local webdebug
-
+//-- helpers for debugging code
 var debugHelpers = require('./local_modules/util/DebugHelpers');
+
+//-- helpers for handling canvas requests
 var canvasHelpers = require( './local_modules/util/CanvasHelpers' );
 
-app.use( bodyParser.json() );
-app.use( bodyParser.urlencoded({ extended: true }));
+//-- required to parse canvas/multi-part requests
+//-- always needs to be first.
+//app.use( bodyParser.json() );
+//app.use( bodyParser.urlencoded({ extended: true }));
 
-app.set('port', (process.env.PORT || 5000));
-
+//-- configure express
+app.set('port', (process.env.PORT || config.default.PORT ));
 app.use(express.static(__dirname + '/public'));
-
-// views is directory for all template files
 app.set('views', __dirname + '/views');
 app.set('view engine', 'ejs');
 
-app.get('/', function(req, resp) {
-  resp.render('pages/index');
-});
+//-- page handlers
 
-function checkForSignedRequest( req, resp ){
-	var signedRequest = 'cuca.monga';
-	if( req.body && req.body.signed_request ){
-		signedRequest = req.body.signed_request;
-	}
-	var secret = process.env.CONSUMER_SECRET;
-	
-	if( !canvasHelpers.checkSignedRequest( signedRequest, secret )){
-		resp.render( 'pages/error', {
-			errMsg: 'not a valid signed request'
-		});
-	}
-	return( canvasHelpers.checkSignedRequest( signedRequest, secret ));
-}
-
-function checkAllParams( req, resp ){
-	debugHelpers.prettyTrace( req.params, 'req.params' );
-	debugHelpers.prettyTrace( req.query, 'req.query' );
-	debugHelpers.prettyTrace( req.headers, 'req.headers' );
-	debugHelpers.prettyTrace( req.body, 'req.body' );
-	debugHelpers.prettyTrace( process.env, 'process.env' );
+/**
+ * Handler for the initial / page
+ * @param req (request)
+ * @param resp (Response)
+ **/
+function handleDefault(req, resp) {
+  resp.status( config.statusCodes.unauthorized )
+  	.send( config.statusCodes.unauthorizedText );
 }
 
 /**
@@ -68,7 +48,7 @@ function checkAllParams( req, resp ){
  *  @param resp (response)
 **/
 function handleCallback( req, resp ){
-	if( !checkForSignedRequest( req, resp )) return;
+	if( !canvasHelpers.checkForSignedRequest( req, resp )) return;
 	
 	resp.render('pages/callback');
 }
@@ -79,9 +59,9 @@ function handleCallback( req, resp ){
  *  @param resp (response)
 **/
 function handleCanvasRequest( req, resp ){
-	if( !checkForSignedRequest( req, resp )) return;
+	if( !canvasHelpers.checkForSignedRequest( req, resp )) return;
 	
-	var userInfo = canvasHelpers.getUserInfo( req.body.signed_request, process.env.CONSUMER_SECRET );
+	var userInfo = canvasHelpers.getSignedRequestContext( req );
 	
 	resp.render('pages/canvas', {
 		CLIENT_ID: process.env.CONSUMER_KEY,
@@ -92,9 +72,12 @@ function handleCanvasRequest( req, resp ){
 	});
 }
 
-app.get('/callback', handleCallback );
+app.get('/', handleDefault );
 app.get('/canvas', handleCanvasRequest );
 app.post('/canvas', handleCanvasRequest);
+
+//-- deprecated, do not expect users to authorize.
+app.get('/callback', handleCallback );
 
 app.listen(app.get('port'), function() {
 	console.log('Node app is running on port', app.get('port'));

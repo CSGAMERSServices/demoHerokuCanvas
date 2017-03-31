@@ -3,7 +3,61 @@
  * @author Paul Roth <proth@salesforce.com>
  **/
 
+//-- cryptography library
 var CryptoJS = require( 'crypto-js' );
+
+//-- used to access canvas multi-part body signatures
+var bodyParser = require('body-parser');
+var multer = require('multer');
+var upload = multer();
+
+
+/**
+ * Determines the signed request for a request.
+ * @param req (Request)
+ * @return (String)
+ **/
+function getSignedRequest( req ){
+	return( process.env.EX_SIGNED_REQUEST || "bad.signed_request" );
+}
+
+/**
+ * Determines the shared secret
+ * @visibility - private
+ * @return (String)
+ */
+function getSharedSecret(){
+	return( process.env.CONSUMER_SECRET || 'bad.shared_secret' );
+}
+
+/**
+ * Verifies a request is signed.
+ * <p>Defaults the signed request using EX_SIGNED_REQUEST if one was sent though</p>
+ * 
+ * @param req (Request) - assumed multi-part.body.signed_request has been sent
+ * @param resp (Response) - response to be returned.
+ * @return (Boolean) - if the request was authorized (true) or not(false)
+ */
+function checkForSignedRequest( req, resp ){
+	
+	//-- default using the ex signed request if it is present
+	var signedRequest = getSignedRequest( req );
+	
+	//-- always use the request sent by body if one was sent though.
+	if( req.body && req.body.signed_request ){
+		signedRequest = req.body.signed_request;
+	}
+	
+	var secret = getSharedSecret();
+	
+	var isValidRequest = validateSignedRequest( signedRequest, secret );
+	if( !isValidRequest ){
+		resp.render( 'pages/error', {
+			errMsg: 'not a valid signed request'
+		});
+	}
+	return( isValidRequest );
+}
  
 /**
  *  Checks a signed request
@@ -11,29 +65,35 @@ var CryptoJS = require( 'crypto-js' );
  *  @param sharedSecret (String)
  *  @return boolean - true if passing false if not
 **/
-function checkSignedRequest( signedRequest, sharedSecret ){
-	
-	console.log( 'secret:' + sharedSecret );
-	console.log( 'signed request:' + signedRequest );
+function validateSignedRequest( signedRequest, sharedSecret ){
 	
 	var matches = false;
+	
+	var hashedContext, b64Hash, context, hash;
+	
 	try {
 		//-- hashed context
-		var hashedContext = signedRequest.split( '.' )[0];
-		var context = signedRequest.split( '.' )[1];
+		hashedContext = signedRequest.split( '.' )[0];
+		context = signedRequest.split( '.' )[1];
 		
 		//-- sign the hash with the secret
-		var hash = CryptoJS.HmacSHA256( context, sharedSecret );
-		var b64Hash = CryptoJS.enc.Base64.stringify( hash );
-		
-		console.log( 'what I am expecting:' + b64Hash );
-		console.log( 'what I got:' + hashedContext );
+		hash = CryptoJS.HmacSHA256( context, sharedSecret );
+		b64Hash = CryptoJS.enc.Base64.stringify( hash );
 		
 		matches = (hashedContext === b64Hash );
-		console.log( 'matches:' + matches );
+		
 	} catch( err ){
 		console.error( 'error occurred while checking signed request' );
 		console.error( err );
+	}
+	
+	if( matches ){
+		console.log( 'signed_request matches' );
+	} else {
+		console.error( 'signed_request DOES NOT MATCH' +
+			'\nExpecting:' + b64Hash +
+			'\nFound:' + hashedContext
+		);
 	}
 	
 	return( matches );
@@ -45,11 +105,11 @@ function checkSignedRequest( signedRequest, sharedSecret ){
  * @param sharedSecret (String)
  * @return UserInfo (Object)
  **/
-function getUserInfo( signedRequest, sharedSecret ){
+function getSignedRequestContext( req ){
 	var results = {};
 	
-	console.log( 'secret:' + sharedSecret );
-	console.log( 'signed request:' + signedRequest );
+	var signedRequest = getSignedRequest( req );
+	var sharedSecret = getSharedSecret();
 	
 	//-- hashed context
 	var hashedContext = signedRequest.split( '.' )[0];
@@ -57,12 +117,16 @@ function getUserInfo( signedRequest, sharedSecret ){
 	
 	var words = CryptoJS.enc.Base64.parse(context);
 	var textString = CryptoJS.enc.Utf8.stringify(words);
-	console.log( 'context String:' ); console.log( textString );
+	
+	//-- @TODO: remove
+	console.log( 'signed request context:' ); console.log( textString );
 	
 	return( JSON.parse( textString ));
 }
 
 module.exports = {
-	checkSignedRequest: checkSignedRequest,
-	getUserInfo: getUserInfo
+	getSignedRequest: getSignedRequest,
+	checkForSignedRequest: checkForSignedRequest,
+	validateSignedRequest: validateSignedRequest,
+	getSignedRequestContext: getSignedRequestContext
 };
