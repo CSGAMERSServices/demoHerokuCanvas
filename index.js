@@ -86,7 +86,8 @@ function handleCanvasRequest( req, resp ){
 	resp.render('pages/canvas', {
 		CLIENT_ID: process.env.CONSUMER_KEY,
 		USERNAME: userInfo.context.user.fullName,
-		TOKEN: userInfo.oauthToken
+		TOKEN: userInfo.client.oauthToken,
+		USER_INFO: userInfo
 	});
 }
 

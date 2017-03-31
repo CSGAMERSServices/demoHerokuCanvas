@@ -25,12 +25,23 @@ https://developer.salesforce.com/docs/atlas.en-us.platform_connect.meta/platform
 
 <div class='rome-lds'>
 	<h1>Hey <%= USERNAME %></h1>
+	<div>
+		<table>
+			<th>
+				<td>Name</td><td>Value</td>
+			</th>
+			<tr>
+				<td>userName</td><td><%= USER_INFO.context.user.userName %></td>
+				<td>email</td><td><%= USER_INFO.context.user.email %></td>
+			</tr>
+		</table>
+	</div>
 	<div class="slds-form-element">
 		<label class="slds-form-element__label" for="text-input-01">Input Label</label>
 		<div class="slds-form-element__control">
 			<input type="text" id="msgIn" class="slds-input" placeholder="Message goes here" />
 		</div>
-		<button id='loginBtn' type='button' class='slds-button slds-button--brand'>Login</button>
+		<button id='actionBtn' type='button' class='slds-button slds-button--brand'>Go</button>
 	</div>
 </div>
 
