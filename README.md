@@ -2,7 +2,7 @@
 
 Heroku app to handle long running request: importing ticket audits.
 
-Please see [https://rally1.rallydev.com/#/58107682671d/detail/userstory/61061019169](US258) for more information.
+Please see [US258](https://rally1.rallydev.com/#/58107682671d/detail/userstory/61061019169) for more information.
 
 
 
@@ -28,12 +28,36 @@ To run the worker
 
 ### Visualforce (using signed request)
 
-[https://lne--dev0--c.cs2.visual.force.com/apex/TEST_TicketScaleImport](https://lne--dev0--c.cs2.visual.force.com/apex/TEST_TicketScaleImport)
+[/apex/TEST_TicketScaleImport](https://lne--dev0--c.cs2.visual.force.com/apex/TEST_TicketScaleImport)
 
 ### Connected App
 
-[https://lne--dev0.cs2.my.salesforce.com/app/mgmt/forceconnectedapps/forceAppDetail.apexp?applicationId=06PR00000008RAl&notify=true&id=0CiR00000004Krr](Connected App 1)
-[https://lne--dev0.cs2.my.salesforce.com/_ui/core/application/force/connectedapp/ForceConnectedApplicationPage/d?applicationId=06PR00000008RAl](Connected App 2)
+[Connected App 1](https://lne--dev0.cs2.my.salesforce.com/app/mgmt/forceconnectedapps/forceAppDetail.apexp?applicationId=06PR00000008RAl&notify=true&id=0CiR00000004Krr)
+
+[Connected App 2](https://lne--dev0.cs2.my.salesforce.com/_ui/core/application/force/connectedapp/ForceConnectedApplicationPage/d?applicationId=06PR00000008RAl)
+
+
+# Debugging the app
+
+run node-inspector in a separate browser window
+
+then run heroku local webdebug
+
+@TODO - include more info
+
+# Fixing permissions
+
+Sometimes people have different umask settings on their machines, meaning files generated appear modified when instead they just have different permissions.
+
+Navigate to the base of the repo and run this shellscript:
+
+	git config --global --add alias.permission-reset '!git diff -p -R --no-color | grep -E "^(diff|(old|new) mode)" --color=never | git apply'
+
+Now, you can run this git command 
+
+	git permission-reset
+
+All files are reset back to the permission known within git.
 
 
 # Common Links
