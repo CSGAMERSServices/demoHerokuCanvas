@@ -8,38 +8,13 @@
 <body>
 
 <script type='text/javascript'>
-	function loginHandler( e ){
-		if( !Sfdc.canvas.oauth.loggedin() ){
-			var uri= Sfdc.canvas.oauth.loginUrl();
-			Sfdc.canvas.oauth.login({
-				uri: uri,
-				params: {
-					"response_type": "token",
-					"client_id": "<%= CLIENT_ID %>",
-					"redirect_uri": encodeURIComponent(
-						"https://ticket-scale-import.herokuapp.com/callback"
-					)
-				}
-			});
-		} else {
-			Sfdc.canvas.oauth.logout();
-			Sfdc.canvas.byId( 'loginBtn' ).innerHTML = 'Login';
-		}
-	}
-	
 	Sfdc.canvas( function(){
 		var loggedIn = Sfdc.canvas.oauth.loggedin();
-		var token = Sfdc.canvas.oauth.token();
-		var loginBtn	= Sfdc.canvas.byId( 'loginBtn' );
-		var msgIn		= Sfdc.canvas.byId( 'msgIn' );
+		var token = "<%= TOKEN %>";
+		var msgIn = Sfdc.canvas.byId( "msgIn" );
 		
 		debugger;
-		
-		if( loggedIn ){
-			msgIn.set( "value", "currently logged in" );
-			loginBtn.innerHTML = 'Logout';
-		}
-		loginBtn.onclick = loginHandler;
+		msgIn.setAttribute( "value", token );
 	});
 </script>
 
@@ -49,7 +24,7 @@ https://developer.salesforce.com/docs/atlas.en-us.platform_connect.meta/platform
 -->
 
 <div class='rome-lds'>
-	<h1>This is an example callback page</h1>
+	<h1>Hey <%= USERNAME %></h1>
 	<div class="slds-form-element">
 		<label class="slds-form-element__label" for="text-input-01">Input Label</label>
 		<div class="slds-form-element__control">

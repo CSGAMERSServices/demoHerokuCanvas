@@ -26,10 +26,6 @@ function checkSignedRequest( signedRequest, sharedSecret ){
 		var hash = CryptoJS.HmacSHA256( context, sharedSecret );
 		var b64Hash = CryptoJS.enc.Base64.stringify( hash );
 		
-		var words = CryptoJS.enc.Base64.parse(context);
-		var textString = CryptoJS.enc.Utf8.stringify(words);
-		console.log( 'context String:' ); console.log( textString );
-		
 		console.log( 'what I am expecting:' + b64Hash );
 		console.log( 'what I got:' + hashedContext );
 		
@@ -41,6 +37,29 @@ function checkSignedRequest( signedRequest, sharedSecret ){
 	}
 	
 	return( matches );
+}
+
+/**
+ * Get user context
+ * @param signedRequest (String)
+ * @param sharedSecret (String)
+ * @return UserInfo (Object)
+ **/
+function getUserInfo( signedRequest, sharedSecret ){
+	var results = {};
+	
+	console.log( 'secret:' + sharedSecret );
+	console.log( 'signed request:' + signedRequest );
+	
+	//-- hashed context
+	var hashedContext = signedRequest.split( '.' )[0];
+	var context = signedRequest.split( '.' )[1];
+	
+	var words = CryptoJS.enc.Base64.parse(context);
+	var textString = CryptoJS.enc.Utf8.stringify(words);
+	console.log( 'context String:' ); console.log( textString );
+	
+	return( JSON.parse( textString ));
 }
 
 module.exports = {

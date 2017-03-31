@@ -81,8 +81,12 @@ function handleCallback( req, resp ){
 function handleCanvasRequest( req, resp ){
 	if( !checkForSignedRequest( req, resp )) return;
 	
+	var userInfo = canvasHelpers.getUserInfo( req, resp );
+	
 	resp.render('pages/canvas', {
-		CLIENT_ID: process.env.CONSUMER_KEY
+		CLIENT_ID: process.env.CONSUMER_KEY,
+		USERNAME: userInfo.context.user.fullName,
+		TOKEN: userInfo.oauthToken
 	});
 }
 
