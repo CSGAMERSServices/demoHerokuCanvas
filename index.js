@@ -81,7 +81,9 @@ function handleCallback( req, resp ){
 function handleCanvasRequest( req, resp ){
 	if( !checkForSignedRequest( req, resp )) return;
 	
-	resp.render('pages/canvas');
+	resp.render('pages/canvas', {
+		CLIENT_ID: process.env.CONSUMER_KEY
+	});
 }
 
 app.get('/callback', handleCallback );
