@@ -43,7 +43,10 @@ function getSignedRequest( req ){
 	
 	//-- always use the request sent by body if one was sent though.
 	if( req.body && req.body.signed_request ){
+		console.log( 'req.body' );
 		result = req.body.signed_request;
+	} else {
+		console.log( 'req.body not found' );
 	}
 	
 	return( result );
