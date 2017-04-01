@@ -65,7 +65,10 @@ function handleCanvasRequest( req, resp ){
 	
 	var userInfo = canvasHelpers.getSignedRequestContext( req );
 	
+	var signedRequest = canvasHelpers.getSignedRequest( req );
+	
 	resp.render('pages/canvas', {
+		SIGNED_REQUEST: signedRequest,
 		CLIENT_ID: process.env.CONSUMER_KEY,
 		USERNAME: userInfo.context.user.fullName,
 		INSTANCE_URL: userInfo.client.instanceUrl,

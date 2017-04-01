@@ -32,7 +32,7 @@
 			//debugger;
 		});
 		
-		msgIn.setAttribute( "value", token );
+		msgIn.setAttribute( "value", "<%= SIGNED_REQUEST %>" );
 	});
 </script>
 
@@ -57,7 +57,7 @@ https://jsforce.github.io/document/
 		</table>
 	</div>
 	<div class="slds-form-element">
-		<label class="slds-form-element__label" for="text-input-01">Input Label</label>
+		<label class="slds-form-element__label" for="text-input-01">Your signed request</label>
 		<div class="slds-form-element__control">
 			<input type="text" id="msgIn" class="slds-input" placeholder="Message goes here" />
 		</div>
