@@ -24,6 +24,11 @@
 			serverUrl: "<%= INSTANCE_URL %>"
 		});
 		
+		jsf.query ("select id, name from account limit 1", function( err, records ){
+			console.log( "query returned" );
+			debugger;
+		});
+		
 		msgIn.setAttribute( "value", token );
 	});
 </script>
