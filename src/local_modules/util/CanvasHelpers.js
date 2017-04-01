@@ -18,7 +18,14 @@ var upload = multer();
  * @return (String)
  **/
 function getSignedRequest( req ){
-	return( process.env.EX_SIGNED_REQUEST || "bad.signed_request" );
+	var result = ( process.env.EX_SIGNED_REQUEST || "bad.signed_request" );
+	
+	//-- always use the request sent by body if one was sent though.
+	if( req.body && req.body.signed_request ){
+		result = req.body.signed_request;
+	}
+	
+	return( result );
 }
 
 /**
@@ -42,11 +49,6 @@ function checkForSignedRequest( req, resp ){
 	
 	//-- default using the ex signed request if it is present
 	var signedRequest = getSignedRequest( req );
-	
-	//-- always use the request sent by body if one was sent though.
-	if( req.body && req.body.signed_request ){
-		signedRequest = req.body.signed_request;
-	}
 	
 	var secret = getSharedSecret();
 	
