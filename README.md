@@ -71,3 +71,4 @@ For more information about using Node.js on Heroku, see these Dev Center article
 - [Using WebSockets on Heroku with Node.js](https://devcenter.heroku.com/articles/node-websockets)
 - [Platform connect](https://developer.salesforce.com/docs/atlas.en-us.platform_connect.meta/platform_connect/canvas_app_oauth_code_example.htm)
 - [JSForce](https://jsforce.github.io/document/)
+- [Lightning Design System - LDS](https://www.lightningdesignsystem.com)

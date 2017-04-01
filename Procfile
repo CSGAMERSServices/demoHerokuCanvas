@@ -1,2 +1,3 @@
-web: node index.js
-webdebug: node --debug-brk index.js
+web:		node				src/index.js
+webdebug:	node --debug-brk	src/index.js
+worker:		node 				src/worker.js

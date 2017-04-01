@@ -24,7 +24,7 @@ var canvasHelpers = require( './local_modules/util/CanvasHelpers' );
 //app.use( bodyParser.json() );
 //app.use( bodyParser.urlencoded({ extended: true }));
 
-//-- configure express
+//-- configure express (using the current directory
 app.set('port', (process.env.PORT || config.default.PORT ));
 app.use(express.static(__dirname + '/public'));
 app.set('views', __dirname + '/views');
