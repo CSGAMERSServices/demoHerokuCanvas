@@ -22,8 +22,8 @@ var canvasHelpers = require( './local_modules/util/CanvasHelpers' );
 
 //-- required to parse canvas/multi-part requests
 //-- always needs to be first.
-//app.use( bodyParser.json() );
-//app.use( bodyParser.urlencoded({ extended: true }));
+app.use( bodyParser.json() );
+app.use( bodyParser.urlencoded({ extended: true }));
 
 //-- configure express (using the current directory
 app.set('port', (process.env.PORT || config.default.PORT ));
@@ -31,59 +31,6 @@ app.use(express.static(__dirname + '/public'));
 app.set('views', __dirname + '/views');
 app.set('view engine', 'ejs');
 
-//-- cannot be moved/ must be here?
-
-/**
- * Determines the signed request for a request.
- * @param req (Request)
- * @return (String)
- **/
-function getSignedRequest( req ){
-	var result = ( process.env.EX_SIGNED_REQUEST || "bad.signed_request" );
-	
-	//-- always use the request sent by body if one was sent though.
-	if( req.body && req.body.signed_request ){
-		console.log( 'req.body' );
-		result = req.body.signed_request;
-	} else {
-		console.log( 'req.body not found' );
-	}
-	
-	return( result );
-}
-
-/**
- * Determines the shared secret
- * @visibility - private
- * @return (String)
- */
-function getSharedSecret(){
-	return( process.env.CONSUMER_SECRET || 'bad.shared_secret' );
-}
-
-/**
- * Verifies a request is signed.
- * <p>Defaults the signed request using EX_SIGNED_REQUEST if one was sent though</p>
- * 
- * @param req (Request) - assumed multi-part.body.signed_request has been sent
- * @param resp (Response) - response to be returned.
- * @return (Boolean) - if the request was authorized (true) or not(false)
- */
-function checkForSignedRequest( req, resp ){
-	
-	//-- default using the ex signed request if it is present
-	var signedRequest = getSignedRequest( req );
-	
-	var secret = getSharedSecret();
-	
-	var isValidRequest = canvasHelpers.validateSignedRequest( signedRequest, secret );
-	if( !isValidRequest ){
-		resp.render( 'pages/error', {
-			errMsg: 'not a valid signed request'
-		});
-	}
-	return( isValidRequest );
-}
 
 //-- page handlers
 
@@ -103,7 +50,7 @@ function handleDefault(req, resp) {
  *  @param resp (response)
 **/
 function handleCallback( req, resp ){
-	if( !checkForSignedRequest( req, resp )) return;
+	if( !canvasHelpers.checkForSignedRequest( req, resp )) return;
 	
 	resp.render('pages/callback');
 }
@@ -114,12 +61,9 @@ function handleCallback( req, resp ){
  *  @param resp (response)
 **/
 function handleCanvasRequest( req, resp ){
-	if( !checkForSignedRequest( req, resp )) return;
+	if( !canvasHelpers.checkForSignedRequest( req, resp )) return;
 	
-	var signedRequest = getSignedRequest( req );
-	var sharedSecret = getSharedSecret();
-	
-	var userInfo = canvasHelpers.getSignedRequestContext( signedRequest, sharedSecret );
+	var userInfo = canvasHelpers.getSignedRequestContext( req );
 	
 	resp.render('pages/canvas', {
 		CLIENT_ID: process.env.CONSUMER_KEY,

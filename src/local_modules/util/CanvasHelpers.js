@@ -12,6 +12,57 @@ var multer = require('multer');
 var upload = multer();
 
 
+/**
+ * Determines the signed request for a request.
+ * @param req (Request)
+ * @return (String)
+ **/
+function getSignedRequest( req ){
+	var result = ( process.env.EX_SIGNED_REQUEST || "bad.signed_request" );
+	
+	//-- always use the request sent by body if one was sent though.
+	if( req.body && req.body.signed_request ){
+		console.log( 'req.body' );
+		result = req.body.signed_request;
+	} else {
+		console.log( 'req.body not found' );
+	}
+	
+	return( result );
+}
+
+/**
+ * Determines the shared secret
+ * @visibility - private
+ * @return (String)
+ */
+function getSharedSecret(){
+	return( process.env.CONSUMER_SECRET || 'bad.shared_secret' );
+}
+
+/**
+ * Verifies a request is signed.
+ * <p>Defaults the signed request using EX_SIGNED_REQUEST if one was sent though</p>
+ * 
+ * @param req (Request) - assumed multi-part.body.signed_request has been sent
+ * @param resp (Response) - response to be returned.
+ * @return (Boolean) - if the request was authorized (true) or not(false)
+ */
+function checkForSignedRequest( req, resp ){
+	
+	//-- default using the ex signed request if it is present
+	var signedRequest = getSignedRequest( req );
+	
+	var secret = getSharedSecret();
+	
+	var isValidRequest = validateSignedRequest( signedRequest, secret );
+	if( !isValidRequest ){
+		resp.render( 'pages/error', {
+			errMsg: 'not a valid signed request'
+		});
+	}
+	return( isValidRequest );
+}
 
  
 /**
@@ -60,8 +111,11 @@ function validateSignedRequest( signedRequest, sharedSecret ){
  * @param sharedSecret (String)
  * @return UserInfo (Object)
  **/
-function getSignedRequestContext( signedRequest, sharedSecret ){
+function getSignedRequestContext( req ){
 	var results = {};
+	
+	var signedRequest = getSignedRequest( req );
+	var sharedSecret = getSharedSecret();
 	
 	//-- hashed context
 	var hashedContext = signedRequest.split( '.' )[0];
@@ -77,6 +131,8 @@ function getSignedRequestContext( signedRequest, sharedSecret ){
 }
 
 module.exports = {
+	getSignedRequest: getSignedRequest,
+	checkForSignedRequest: checkForSignedRequest,
 	validateSignedRequest: validateSignedRequest,
 	getSignedRequestContext: getSignedRequestContext
 };
