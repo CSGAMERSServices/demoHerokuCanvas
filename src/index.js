@@ -31,6 +31,57 @@ app.use(express.static(__dirname + '/public'));
 app.set('views', __dirname + '/views');
 app.set('view engine', 'ejs');
 
+//-- cannot be moved/ must be here?
+
+/**
+ * Determines the signed request for a request.
+ * @param req (Request)
+ * @return (String)
+ **/
+function getSignedRequest( req ){
+	var result = ( process.env.EX_SIGNED_REQUEST || "bad.signed_request" );
+	
+	//-- always use the request sent by body if one was sent though.
+	if( req.body && req.body.signed_request ){
+		result = req.body.signed_request;
+	}
+	
+	return( result );
+}
+
+/**
+ * Determines the shared secret
+ * @visibility - private
+ * @return (String)
+ */
+function getSharedSecret(){
+	return( process.env.CONSUMER_SECRET || 'bad.shared_secret' );
+}
+
+/**
+ * Verifies a request is signed.
+ * <p>Defaults the signed request using EX_SIGNED_REQUEST if one was sent though</p>
+ * 
+ * @param req (Request) - assumed multi-part.body.signed_request has been sent
+ * @param resp (Response) - response to be returned.
+ * @return (Boolean) - if the request was authorized (true) or not(false)
+ */
+function checkForSignedRequest( req, resp ){
+	
+	//-- default using the ex signed request if it is present
+	var signedRequest = getSignedRequest( req );
+	
+	var secret = getSharedSecret();
+	
+	var isValidRequest = canvasHelpers.validateSignedRequest( signedRequest, secret );
+	if( !isValidRequest ){
+		resp.render( 'pages/error', {
+			errMsg: 'not a valid signed request'
+		});
+	}
+	return( isValidRequest );
+}
+
 //-- page handlers
 
 /**
@@ -49,7 +100,7 @@ function handleDefault(req, resp) {
  *  @param resp (response)
 **/
 function handleCallback( req, resp ){
-	if( !canvasHelpers.checkForSignedRequest( req, resp )) return;
+	if( !checkForSignedRequest( req, resp )) return;
 	
 	resp.render('pages/callback');
 }
@@ -60,7 +111,7 @@ function handleCallback( req, resp ){
  *  @param resp (response)
 **/
 function handleCanvasRequest( req, resp ){
-	if( !canvasHelpers.checkForSignedRequest( req, resp )) return;
+	if( !checkForSignedRequest( req, resp )) return;
 	
 	var userInfo = canvasHelpers.getSignedRequestContext( req );
 	
