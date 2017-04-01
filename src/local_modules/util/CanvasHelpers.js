@@ -60,11 +60,8 @@ function validateSignedRequest( signedRequest, sharedSecret ){
  * @param sharedSecret (String)
  * @return UserInfo (Object)
  **/
-function getSignedRequestContext( req ){
+function getSignedRequestContext( signedRequest, sharedSecret ){
 	var results = {};
-	
-	var signedRequest = getSignedRequest( req );
-	var sharedSecret = getSharedSecret();
 	
 	//-- hashed context
 	var hashedContext = signedRequest.split( '.' )[0];
@@ -80,8 +77,6 @@ function getSignedRequestContext( req ){
 }
 
 module.exports = {
-	getSignedRequest: getSignedRequest,
-	checkForSignedRequest: checkForSignedRequest,
 	validateSignedRequest: validateSignedRequest,
 	getSignedRequestContext: getSignedRequestContext
 };
