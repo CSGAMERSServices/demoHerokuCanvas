@@ -11,6 +11,8 @@
 	
 	jsf = null;
 	
+	client = <%- JSON.stringify( USER_INFO.client ) %>;
+	
 	Sfdc.canvas( function(){
 		var loggedIn = Sfdc.canvas.oauth.loggedin();
 		var token = "<%= TOKEN %>";
@@ -31,7 +33,7 @@
 			}
 			debugger;
 			
-			Sfdc.canvas.client.publish({ name:"mynamespace.myevent0", payload: { cuca:"monga" }});
+			Sfdc.canvas.client.publish( client, { name:"mynamespace.myevent0", payload: { cuca:"monga" }});
 		});
 		
 		msgIn.setAttribute( "value", "<%= SIGNED_REQUEST %>" );
