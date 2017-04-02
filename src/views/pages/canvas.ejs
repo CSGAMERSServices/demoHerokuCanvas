@@ -18,6 +18,7 @@
 		var token = "<%= TOKEN %>";
 		var msgIn = Sfdc.canvas.byId( "msgIn" );
 		var userInfo = <%- JSON.stringify( USER_INFO ) %>;
+		var closeBtn = Sfdc.canvas.byId( "closeBtn" );
 		
 		//debugger;
 
@@ -32,9 +33,12 @@
 				console.log( records );
 			}
 			debugger;
-			
-			Sfdc.canvas.client.publish( client, { name:"mynamespace.closeDialog", payload: { status:"SUCCESS" }});
 		});
+		
+		closeBtn.onclick = function( evt ){
+			console.log( 'closeBtn called' );debugger;
+			Sfdc.canvas.client.publish( client, { name:"mynamespace.closeDialog", payload: { status:"SUCCESS" }});
+		}
 		
 		msgIn.setAttribute( "value", "<%= SIGNED_REQUEST %>" );
 	});
@@ -65,7 +69,7 @@ https://jsforce.github.io/document/
 		<div class="slds-form-element__control">
 			<input type="text" id="msgIn" class="slds-input" placeholder="Message goes here" />
 		</div>
-		<button id='actionBtn' type='button' class='slds-button slds-button--brand'>Go</button>
+		<button id='closeBtn' type='button' class='slds-button slds-button--brand'>Close</button>
 	</div>
 </div>
 
