@@ -33,7 +33,7 @@
 			}
 			debugger;
 			
-			Sfdc.canvas.client.publish( client, { name:"mynamespace.myevent0", payload: { cuca:"monga" }});
+			Sfdc.canvas.client.publish( client, { name:"mynamespace.closeDialog", payload: { status:"SUCCESS" }});
 		});
 		
 		msgIn.setAttribute( "value", "<%= SIGNED_REQUEST %>" );
