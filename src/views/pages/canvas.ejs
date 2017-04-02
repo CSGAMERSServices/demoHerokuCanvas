@@ -31,7 +31,7 @@
 			}
 			debugger;
 			
-			Sfdc.canvas.controller.publish({ name:"myevent0", payload: { cuca:"monga" }});
+			Sfdc.canvas.client.publish({ name:"mynamespace.myevent0", payload: { cuca:"monga" }});
 		});
 		
 		msgIn.setAttribute( "value", "<%= SIGNED_REQUEST %>" );
