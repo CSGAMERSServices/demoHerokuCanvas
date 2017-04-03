@@ -19,8 +19,15 @@
 		var msgIn = Sfdc.canvas.byId( "msgIn" );
 		var userInfo = <%- JSON.stringify( USER_INFO ) %>;
 		var closeBtn = Sfdc.canvas.byId( "closeBtn" );
+		var userInfoContext = Sfdc.canvas.byId( "userInfoContext" );
 		
 		//debugger;
+		
+		try {
+			userInfoContext.value = JSON.stringify( userInfo, null, 4 );
+		} catch( err ){
+			console.error( "unable to set user info context" ); console.error( err );
+		}
 
 		jsf = new jsforce.Connection({
 			sessionId: "<%= TOKEN %>",
@@ -69,6 +76,14 @@ https://jsforce.github.io/document/
 		<div class="slds-form-element__control">
 			<input type="text" id="msgIn" class="slds-input" placeholder="Message goes here" />
 		</div>
+	</div>
+	<div class='slds-form-element'>
+		<label class="slds-form-element__label" for="text-input-01">Signed Request Contents</label>
+		<div class="slds-form-element__control">
+			<textarea id='userInfoContext' class='slds-textarea' ></textarea>
+		</div>
+	</div>
+	<div class='slds-form-element'>
 		<button id='closeBtn' type='button' class='slds-button slds-button--brand'>Close</button>
 	</div>
 </div>
