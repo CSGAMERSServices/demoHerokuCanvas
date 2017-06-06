@@ -72,3 +72,21 @@ For more information about using Node.js on Heroku, see these Dev Center article
 - [Platform connect](https://developer.salesforce.com/docs/atlas.en-us.platform_connect.meta/platform_connect/canvas_app_oauth_code_example.htm)
 - [JSForce](https://jsforce.github.io/document/)
 - [Lightning Design System - LDS](https://www.lightningdesignsystem.com)
+
+# how was this made
+
+- [nodejs buildpack](https://github.com/heroku/heroku-buildpack-nodejs)
+- [canvas developer guide](https://resources.docs.salesforce.com/sfdc/pdf/canvas_framework.pdf)
+- [made a canvas app](https://lne--dev0.cs2.my.salesforce.com/app/mgmt/forceconnectedapps/forceAppDetail.apexp?applicationId=06PR00000004DUq&id=0CiR00000008Usx)
+- [authorize the canvas app for users/profiles/perm sets](https://lne--dev0.cs2.my.salesforce.com/_ui/core/application/force/connectedapp/ForceConnectedApplicationPage/d?applicationId=06PR00000004DUq)
+- [expose out the canvas app in vf](https://www.aside.io?file=TEST_CanvasDemo.page)
+- [demo on dev0](https://dashboard.heroku.com/apps/lne-canvas-demo)
+
+# Example canvas tag in vf
+
+	<apex:canvasApp applicationName="TEST Canvas Demo"
+		namespacePrefix="" onCanvasAppLoad="onCanvasLoad"
+		height="600px" width="100%"
+		parameters="{ eventId:'{! EventDateTime__c.Event__c }', eventDateTimeId:'{! EventDateTime__c.Id }', eventName:'{! JSENCODE( EventDateTime__c.Event__r.EventName__c ) }' }"
+	/>
+	
