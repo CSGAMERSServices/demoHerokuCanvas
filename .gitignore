@@ -1,5 +1,5 @@
 # local files
-setupConfigVars.sh
+#setupConfigVars.sh
 
 # Node build artifacts
 node_modules
