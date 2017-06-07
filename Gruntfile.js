@@ -30,7 +30,8 @@ module.exports = function(grunt) {
         	],
         	options: {
         		//preset: "crockford",
-        		config: "crockford.jscs",
+        		//config: "crockford.jscs",
+        		config: "airbnb.jscs",
         		requireCurlyBraces: [ "if" ],
         		fix: true,
         		disallowSpaceBeforeBlockStatements: true
