@@ -23,6 +23,18 @@ module.exports = function(grunt) {
         		},
         	}
         },
+        jscs: {
+        	src: [
+        		'src/local_modules/**/*.js'
+        	],
+        	options: {
+        		//preset: "crockford",
+        		config: "crockford.jscs",
+        		requireCurlyBraces: [ "if" ],
+        		fix: true,
+        		disallowSpaceBeforeBlockStatements: true
+        	}
+        },
         ejslint: {
 			target: ['src/**/*.ejs']
         },
@@ -48,5 +60,6 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-contrib-watch');
 	grunt.loadNpmTasks('grunt-contrib-clean');
 	grunt.loadNpmTasks('grunt-contrib-jshint');
-    grunt.registerTask("default", ["jshint", "ejslint"]);
+	grunt.loadNpmTasks('grunt-jscs');
+    grunt.registerTask("default", ["jshint", "ejslint", "jscs"]);
 };
