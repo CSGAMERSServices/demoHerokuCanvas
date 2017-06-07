@@ -12,21 +12,21 @@ var express = require('express');
 var app = express();
 
 //-- used to specify config variables
-var config = require( 'config' );
+var config = require('config');
 
 //-- helpers for debugging code
 var debugHelpers = require('./local_modules/util/DebugHelpers');
 
 //-- helpers for handling canvas requests
-var canvasHelpers = require( './local_modules/util/CanvasHelpers' );
+var canvasHelpers = require('./local_modules/util/CanvasHelpers');
 
 //-- required to parse canvas/multi-part requests
 //-- always needs to be first.
-app.use( bodyParser.json() );
-app.use( bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
 
 //-- configure express (using the current directory
-app.set('port', (process.env.PORT || config.default.PORT ));
+app.set('port', (process.env.PORT || config.default.PORT));
 app.use(express.static(__dirname + '/public'));
 app.set('views', __dirname + '/views');
 app.set('view engine', 'ejs');
@@ -39,9 +39,9 @@ app.set('view engine', 'ejs');
  * @param req (request)
  * @param resp (Response)
  **/
-function handleDefault(req, resp) {
-  resp.status( config.statusCodes.unauthorized )
-  	.send( config.statusCodes.unauthorizedText );
+function handleDefault(req, resp){
+	resp.status(config.statusCodes.unauthorized)
+		.send(config.statusCodes.unauthorizedText);
 }
 
 /**
@@ -49,8 +49,8 @@ function handleDefault(req, resp) {
  *  @param req (request)
  *  @param resp (response)
 **/
-function handleCallback( req, resp ){
-	if( !canvasHelpers.checkForSignedRequest( req, resp )) return;
+function handleCallback(req, resp){
+	if (!canvasHelpers.checkForSignedRequest(req, resp)) return;
 	
 	resp.render('pages/callback');
 }
@@ -60,12 +60,12 @@ function handleCallback( req, resp ){
  *  @param req (request)
  *  @param resp (response)
 **/
-function handleCanvasRequest( req, resp ){
-	if( !canvasHelpers.checkForSignedRequest( req, resp )) return;
+function handleCanvasRequest(req, resp){
+	if (!canvasHelpers.checkForSignedRequest(req, resp)) return;
 	
-	var userInfo = canvasHelpers.getSignedRequestContext( req );
+	var userInfo = canvasHelpers.getSignedRequestContext(req);
 	
-	var signedRequest = canvasHelpers.getSignedRequest( req );
+	var signedRequest = canvasHelpers.getSignedRequest(req);
 	
 	resp.render('pages/canvas', {
 		SIGNED_REQUEST: signedRequest,
@@ -77,14 +77,14 @@ function handleCanvasRequest( req, resp ){
 	});
 }
 
-app.get('/', handleDefault );
-app.get('/canvas', handleCanvasRequest );
+app.get('/', handleDefault);
+app.get('/canvas', handleCanvasRequest);
 app.post('/canvas', handleCanvasRequest);
 
 //-- deprecated, do not expect users to authorize.
-app.get('/callback', handleCallback );
+app.get('/callback', handleCallback);
 
-app.listen(app.get('port'), function() {
+app.listen(app.get('port'), function (){
 	console.log('Node app is running on port', app.get('port'));
 });
 

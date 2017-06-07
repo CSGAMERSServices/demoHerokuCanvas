@@ -25,7 +25,8 @@ module.exports = function(grunt) {
         },
         jscs: {
         	src: [
-        		'src/local_modules/**/*.js'
+        		'src/local_modules/**/*.js',
+        		'src/*.js'
         	],
         	options: {
         		//preset: "crockford",

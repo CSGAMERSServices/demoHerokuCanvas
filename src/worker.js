@@ -23,24 +23,24 @@ var WorkerRunner = require('./local_modules/runners/WorkerRunner');
 //-- @TODO: investigate scope for worker.
 var worker = new WorkerRunner();
 
-if( worker.getAJob() ){
-	console.log( 'job was found' );
+if (worker.getAJob()){
+	console.log('job was found');
 	worker.runJob();
 }
 
 //-- note: if we do not use named functions, it names are not included in logs/traces
 var cronScope = {
 	working: false,
-	cronJobRunner: function(){
-		console.log( 'job is currently running' );
+	cronJobRunner: function () {
+		console.log('job is currently running');
 		
-		if( worker.getAJob() ){
+		if (worker.getAJob()){
 			//-- do it. within a module.
-			console.log( 'job was found' );
+			console.log('job was found');
 			worker.runJob();
 		}
 		
-		console.log( 'runner done' );
+		console.log('runner done');
 	}
 };
 

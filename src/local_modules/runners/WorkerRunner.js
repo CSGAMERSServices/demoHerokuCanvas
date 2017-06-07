@@ -12,7 +12,7 @@ var _ = require('underscore');
  * @return String - the job id or null if no job
  **/
 function getAJob(){
-	console.log( 'checking for job. sure!' );
+	console.log('checking for job. sure!');
 	
 	//-- run in an atomic manner
 	//-- @TODO - check if there is a job
@@ -21,7 +21,7 @@ function getAJob(){
 	//-- @TODO - return null if I didn't get it... :(
 	this.jobId = '' + (new Date().getTime());
 	
-	return( this.jobId );
+	return (this.jobId);
 }
 
 /**
@@ -44,7 +44,7 @@ function runJob(){
 		"\n  _   | | |  | |  _ <  | / __| | |    | |  _/ _ \        " +
 		"\n | |__| | |__| | |_) | | \__ \ | |____| | ||  __/_       " +
 		"\n  \____/ \____/|____/  |_|___/ |______|_|_| \___(_)      ";
-	console.log( msg );
+	console.log(msg);
 	
 	return;
 }
@@ -52,14 +52,12 @@ function runJob(){
 /**
  *  Determines if there is a job to be run.
 **/
-var WorkerRunner = function(){
+module.exports = function (){
 	this.isRunning = false;
 	this.jobId = new Date().getTime();
 	
 	this.runJob = runJob;
 	this.getAJob = getAJob;
 	
-	return( this );
+	return (this);
 };
-
-module.exports = WorkerRunner;
