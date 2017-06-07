@@ -20,6 +20,7 @@
 		var userInfo = <%- JSON.stringify( USER_INFO ) %>;
 		var closeBtn = Sfdc.canvas.byId( "closeBtn" );
 		var alertBtn = Sfdc.canvas.byId( "alert" );
+		var alertMsg = Sfdc.canvas.byId( "alertMsg" );
 		var userInfoContext = Sfdc.canvas.byId( "userInfoContext" );
 		
 		//debugger;
@@ -50,7 +51,8 @@
 		
 		alertBtn.onclick = function( evt ){
 			console.log( 'alert button called' ); debugger;
-			Sfdc.canvas.client.publish( client, { name:"mynamespace.alert", payload: { message: "From Visualforce" }} );
+			var alertMsgVal = alertMsg.value;
+			Sfdc.canvas.client.publish( client, { name:"mynamespace.alert", payload: { message: alertMsgVal }} );
 		}
 		
 		msgIn.setAttribute( "value", "<%= SIGNED_REQUEST %>" );
@@ -91,6 +93,7 @@ https://jsforce.github.io/document/
 	<div class='slds-form--stacked'>
 		<div class='actions'>
 			<button id='alert' type='button' class='slds-button slds-button--brand'>Lightning Alert</button>
+			<input type="text" id="alertMsg" class="slds-input" placeholder="Message goes here" />
 		</div>
 		<div class="slds-form-element">
 			<label class="slds-form-element__label" for="text-input-01">Your signed request</label>
