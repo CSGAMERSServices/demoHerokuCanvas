@@ -3,7 +3,7 @@ module.exports = function(grunt) {
         jshint: {
         	heroku: {
         		src: [
-        			'src/**/*.js'
+        			'src/local_modules/**/*.js'
         		],
         		exclude: [
         		],
@@ -23,6 +23,9 @@ module.exports = function(grunt) {
         		},
         	}
         },
+        ejslint: {
+			target: ['src/**/*.ejs']
+        },
     	watch: {
 			default: {
 				files: ['src/**/*.js'],
@@ -41,8 +44,9 @@ module.exports = function(grunt) {
 			}
 		}
     });
+    grunt.loadNpmTasks('grunt-ejslint');
     grunt.loadNpmTasks('grunt-contrib-watch');
 	grunt.loadNpmTasks('grunt-contrib-clean');
 	grunt.loadNpmTasks('grunt-contrib-jshint');
-    grunt.registerTask("default", ["jshint"]);
+    grunt.registerTask("default", ["jshint", "ejslint"]);
 };
