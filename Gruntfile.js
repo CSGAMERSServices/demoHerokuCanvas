@@ -66,6 +66,14 @@ module.exports = function(grunt) {
 				]
 			}
 		},
+		mocha_istanbul: {
+			coverage: {
+				src: 'tests',
+				options: {
+					mask: '*[sS]pec.js'
+				}
+			}
+		},
 		watch: {
 			default: {
 				files: ['src/**/*.js'],
@@ -110,9 +118,12 @@ module.exports = function(grunt) {
 	grunt.loadNpmTasks('grunt-contrib-clean');
 	grunt.loadNpmTasks('grunt-contrib-jshint');
 	grunt.loadNpmTasks('grunt-jscs');
+	grunt.loadNpmTasks('grunt-mocha-istanbul');
 	//grunt.loadNpmTasks('grunt-karma');
 	grunt.loadNpmTasks('grunt-mocha-test');
 	grunt.registerTask("default", ["jshint", "ejslint", "jscs"]);
 	grunt.registerTask("test", ["jshint", "ejslint", "jscs", "mochaTest"]);
 	grunt.registerTask("testOnly", ["mochaTest"]);
+	grunt.registerTask("coverage", ["jshint", "ejslint", "jscs", "mochaTest", "mocha_istanbul"]);
+	grunt.registerTask("coverageOnly", ["mochaTest", "mocha_istanbul"] );
 };

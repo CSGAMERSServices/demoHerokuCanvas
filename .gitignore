@@ -14,3 +14,7 @@ npm-debug.log
 Dockerfile
 docker-compose.yml
 /grunt.log
+
+coverage
+coverage/*
+coverage/**/*
