@@ -39,7 +39,7 @@ app.set('view engine', 'ejs');
  * @param req (request)
  * @param resp (Response)
  **/
-function handleDefault(req, resp){
+function handleDefault(req, resp) {
 	resp.status(config.statusCodes.unauthorized)
 		.send(config.statusCodes.unauthorizedText);
 }
@@ -49,9 +49,9 @@ function handleDefault(req, resp){
  *  @param req (request)
  *  @param resp (response)
 **/
-function handleCallback(req, resp){
+function handleCallback(req, resp) {
 	if (!canvasHelpers.checkForSignedRequest(req, resp)) return;
-	
+
 	resp.render('pages/callback');
 }
 
@@ -60,20 +60,20 @@ function handleCallback(req, resp){
  *  @param req (request)
  *  @param resp (response)
 **/
-function handleCanvasRequest(req, resp){
+function handleCanvasRequest(req, resp) {
 	if (!canvasHelpers.checkForSignedRequest(req, resp)) return;
-	
+
 	var userInfo = canvasHelpers.getSignedRequestContext(req);
-	
+
 	var signedRequest = canvasHelpers.getSignedRequest(req);
-	
+
 	resp.render('pages/canvas', {
 		SIGNED_REQUEST: signedRequest,
 		CLIENT_ID: process.env.CONSUMER_KEY,
 		USERNAME: userInfo.context.user.fullName,
 		INSTANCE_URL: userInfo.client.instanceUrl,
 		TOKEN: userInfo.client.oauthToken,
-		USER_INFO: userInfo
+		USER_INFO: userInfo,
 	});
 }
 
@@ -84,8 +84,7 @@ app.post('/canvas', handleCanvasRequest);
 //-- deprecated, do not expect users to authorize.
 app.get('/callback', handleCallback);
 
-app.listen(app.get('port'), function (){
+app.listen(app.get('port'), function () {
 	console.log('Node app is running on port', app.get('port'));
 });
-
 

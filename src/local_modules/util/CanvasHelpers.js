@@ -17,17 +17,17 @@ var upload = multer();
  * @param req (Request)
  * @return (String)
  **/
-function getSignedRequest(req){
-	var result = (process.env.EX_SIGNED_REQUEST || "bad.signed_request");
-	
+function getSignedRequest(req) {
+	var result = (process.env.EX_SIGNED_REQUEST || 'bad.signed_request');
+
 	//-- always use the request sent by body if one was sent though.
-	if (req.body && req.body.signed_request){
+	if (req.body && req.body.signed_request) {
 		console.log('req.body');
 		result = req.body.signed_request;
-	} else {
+	} else{
 		console.log('req.body not found');
 	}
-	
+
 	return (result);
 }
 
@@ -36,7 +36,7 @@ function getSignedRequest(req){
  * @visibility - private
  * @return (String)
  */
-function getSharedSecret(){
+function getSharedSecret() {
 	return (process.env.CONSUMER_SECRET || 'bad.shared_secret');
 }
 
@@ -48,60 +48,61 @@ function getSharedSecret(){
  * @param resp (Response) - response to be returned.
  * @return (Boolean) - if the request was authorized (true) or not(false)
  */
-function checkForSignedRequest(req, resp){
-	
+function checkForSignedRequest(req, resp) {
+
 	//-- default using the ex signed request if it is present
 	var signedRequest = getSignedRequest(req);
-	
+
 	var secret = getSharedSecret();
-	
+
 	var isValidRequest = validateSignedRequest(signedRequest, secret);
-	if (!isValidRequest){
+	if (!isValidRequest) {
 		resp.render('pages/error', {
-			errMsg: 'not a valid signed request'
+			errMsg: 'not a valid signed request',
 		});
 	}
+
 	return (isValidRequest);
 }
 
- 
+
 /**
  *  Checks a signed request
  *  @param signedRequest (String)
  *  @param sharedSecret (String)
  *  @return boolean - true if passing false if not
 **/
-function validateSignedRequest(signedRequest, sharedSecret){
-	
+function validateSignedRequest(signedRequest, sharedSecret) {
+
 	var matches = false;
-	
+
 	var hashedContext, b64Hash, context, hash;
-	
-	try {
+
+	try{
 		//-- hashed context
 		hashedContext = signedRequest.split('.')[0];
 		context = signedRequest.split('.')[1];
-		
+
 		//-- sign the hash with the secret
 		hash = CryptoJS.HmacSHA256(context, sharedSecret);
 		b64Hash = CryptoJS.enc.Base64.stringify(hash);
-		
+
 		matches = (hashedContext === b64Hash);
-		
-	} catch (err){
+
+	} catch (err) {
 		console.error('error occurred while checking signed request');
 		console.error(err);
 	}
-	
-	if (matches){
+
+	if (matches) {
 		console.log('signed_request matches');
-	} else {
+	} else{
 		console.error('signed_request DOES NOT MATCH' +
 			'\nExpecting:' + b64Hash +
 			'\nFound:' + hashedContext
 		);
 	}
-	
+
 	return (matches);
 }
 
@@ -111,22 +112,22 @@ function validateSignedRequest(signedRequest, sharedSecret){
  * @param sharedSecret (String)
  * @return UserInfo (Object)
  **/
-function getSignedRequestContext(req){
+function getSignedRequestContext(req) {
 	var results = {};
-	
+
 	var signedRequest = getSignedRequest(req);
 	var sharedSecret = getSharedSecret();
-	
+
 	//-- hashed context
 	var hashedContext = signedRequest.split('.')[0];
 	var context = signedRequest.split('.')[1];
-	
+
 	var words = CryptoJS.enc.Base64.parse(context);
 	var textString = CryptoJS.enc.Utf8.stringify(words);
-	
+
 	//-- @TODO: remove
 	console.log('signed request context:'); console.log(textString);
-	
+
 	return (JSON.parse(textString));
 }
 
@@ -134,5 +135,5 @@ module.exports = {
 	getSignedRequest: getSignedRequest,
 	checkForSignedRequest: checkForSignedRequest,
 	validateSignedRequest: validateSignedRequest,
-	getSignedRequestContext: getSignedRequestContext
+	getSignedRequestContext: getSignedRequestContext,
 };

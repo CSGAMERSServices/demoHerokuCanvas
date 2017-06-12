@@ -8,14 +8,15 @@
  * @param obj (Object)
  * @param message (String)
  **/
-function prettyTrace(obj, message){
-	if (obj){
+function prettyTrace(obj, message) {
+	if (obj) {
 		console.log('starting review of:' + message);
-		for (var key in obj){
+		for (var key in obj) {
 			console.log(message + '[' + key + ']:' + (typeof obj[key]) + '=' + obj[key]);
 		}
+
 		console.log('ending review of:' + message);
-	} else {
+	} else{
 		console.log('obj: ' + message + ' - was not sent');
 	}
 }
@@ -24,7 +25,7 @@ function prettyTrace(obj, message){
  * Dumps everything from a request
  * @param req (Request)
  **/
-function dumpRequest(req){
+function dumpRequest(req) {
 	prettyTrace(req.params, 'req.params');
 	prettyTrace(req.query, 'req.query');
 	prettyTrace(req.headers, 'req.headers');
@@ -34,5 +35,5 @@ function dumpRequest(req){
 
 module.exports = {
 	prettyTrace: prettyTrace,
-	dumpRequest: dumpRequest
+	dumpRequest: dumpRequest,
 };
