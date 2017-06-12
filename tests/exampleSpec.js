@@ -4,6 +4,6 @@ var assert = require( 'assert' );
 
 describe( 'Hello World', function () {
 	it( 'says hello', function () {
-		assert.equal( 'Hello world!', helloWorld() );
+		assert.equal( helloWorld(), 'Hello world!' );
 	});
 });
