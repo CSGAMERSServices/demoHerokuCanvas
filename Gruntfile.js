@@ -1,4 +1,14 @@
+/**
+ *  The configuration for Grunt.
+ *  
+ *  Please note that JSCS FIXES the the code if the environment variable
+ *  JSCS_FIX
+ *  is set to "TRUE"
+**/
 module.exports = function(grunt) {
+	
+	var fixJSCS = (process.env.JSCS_FIX && process.env.JSCS_FIX == "TRUE");
+	
 	grunt.initConfig({
 		jshint: {
 			heroku: {
@@ -33,7 +43,7 @@ module.exports = function(grunt) {
 				//config: "crockford.jscs",
 				config: "airbnb.jscs",
 				requireCurlyBraces: [ "if" ],
-				fix: true,
+				fix: fixJSCS,
 				disallowSpaceBeforeBlockStatements: true
 			}
 		},
@@ -56,7 +66,14 @@ module.exports = function(grunt) {
 		watch: {
 			default: {
 				files: ['src/**/*.js'],
-				tasks: ['jslint'],
+				tasks: ["jshint", "ejslint", "jscs"],
+				options: {
+					spawn: false
+				}
+			},
+			test: {
+				files: ['src/**/*.js'],
+				tasks: ["jshint", "ejslint", "jscs", "mochaTest"],
 				options: {
 					spawn: false
 				}
@@ -71,6 +88,20 @@ module.exports = function(grunt) {
 			}
 		}
 	});
+	
+	if( fixJSCS ){
+		grunt.log.writeln( "JSCS CURRENTLY auto-fixes errors" );
+		grunt.log.writeln( "- to disable, run shellscript 'unset JSCS_FIX'" );
+	} else {
+		grunt.log.writeln( "JSCS currently does not auto-fix errors" );
+		grunt.log.writeln( "- to enable, run shellscript 'export JSCS_FIX=\"TRUE\"'" );
+	}
+	//-- uncomment to verify JSCS is fixing or not as expected
+	//-- verifies that JSCS is configured correctly
+	//console.log( "JSCS_FIX:" + fixJSCS );
+	//-- prints out the JSCS config
+	//grunt.log.writeln( JSON.stringify( grunt.config().jscs, null, 2 ));
+	
 	grunt.loadNpmTasks('grunt-ejslint');
 	grunt.loadNpmTasks('grunt-contrib-watch');
 	grunt.loadNpmTasks('grunt-contrib-clean');
@@ -79,4 +110,5 @@ module.exports = function(grunt) {
 	//grunt.loadNpmTasks('grunt-karma');
 	grunt.loadNpmTasks('grunt-mocha-test');
 	grunt.registerTask("default", ["jshint", "ejslint", "jscs"]);
+	grunt.registerTask("test", ["mochaTest"]);
 };
