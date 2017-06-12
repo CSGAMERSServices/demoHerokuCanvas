@@ -43,7 +43,140 @@ run node-inspector in a separate browser window
 
 then run heroku local webdebug
 
-@TODO - include more info
+### Debugging Unit Tests
+
+To debug unit tests, the same steps apply
+but the actual NODE code to be called (instead of that from the proc)
+is actually from grunt
+
+As always, make sure that node-inspector is installed / running
+
+	npm install -g node-inspector
+	
+then
+
+	node-inspector
+	# in some new tab
+
+ex:
+
+	node --debug-brk node_modules/grunt/bin/grunt testOnly
+	
+thats it.
+
+# Running Unit Tests
+
+To run unit tests, run the following:
+
+	grunt test
+	# please note that this calls jshint, jscs, ejslint and mochaTest
+	
+or from watch
+
+	grunt watch:test
+	
+to JUST run unit tests
+
+	grunt testOnly
+
+# Writing Unit Tests
+
+There are three main things to keep in mind for writing unit tests:
+
+* assertions (this is done through chai)
+* spies (whether the method was called)
+* stubs / mocks - when the code calls X, don't call anything and return 42
+  * (please note that stubbing web requests uses nock)
+
+### Assertions
+
+Always use chai assertions like follows:
+
+	var chai = require( 'chai' );
+	var assert = chai.assert;
+	
+then make the request within the code
+
+	assert.isOk('everything', 'everything is ok');
+	assert.isOk(false, 'this will fail');
+	
+for more information on asserts, please see: [Chai](http://chaijs.com/api/assert/)
+
+### Spies
+
+Testing this function can be quite elegantly achieved with a test spy:
+
+	it('calls the original function', function () {
+	    var callback = sinon.spy();
+	    var proxy = once(callback);
+	
+	    proxy();
+	
+	    assert(callback.called);
+	});
+
+The fact that the function was only called once is important:
+
+	it('calls the original function only once', function () {
+	    var callback = sinon.spy();
+	    var proxy = once(callback);
+	
+	    proxy();
+	    proxy();
+	
+	    assert(callback.calledOnce);
+	    // ...or:
+	    // assert.equals(callback.callCount, 1);
+	});
+
+We also care about the this value and arguments:
+
+	it('calls original function with right this and args', function () {
+	    var callback = sinon.spy();
+	    var proxy = once(callback);
+	    var obj = {};
+	
+	    proxy.call(obj, 1, 2, 3);
+	
+	    assert(callback.calledOn(obj));
+ 	   assert(callback.calledWith(1, 2, 3));
+	});
+
+For more information, please see [Sinon](http://sinonjs.org/)
+
+### Stubs / Mocks
+
+The function returned by once should return whatever the original function returns. To test this, we create a stub:
+
+	it("returns the return value from the original function", function () {
+	    var callback = sinon.stub().returns(42);
+	    var proxy = once(callback);
+	
+	    assert.equals(proxy(), 42);
+	});
+	
+Conveniently, stubs can also be used as spies, e.g. we can query them for their callCount, received args and more.
+
+Learn more about stubs.	
+
+For more information, please see:
+
+* [sinon#Stubs](http://sinonjs.org/#stubs)
+* [mock-express-request](https://www.npmjs.com/package/mock-express-request)
+* [mock-express-response](https://www.npmjs.com/package/mock-express-response)
+
+### Nock (network mocks)
+
+To do so,
+comment out any nock code within the test and include the following:
+
+	var nock:any = require('nock');
+	nock.recorder.rec();
+
+When you then run your test again, any calls will be echoed out to the console with the exact nock code to intercept it and provide a stub response.
+
+For more information, please see [Nock](https://www.npmjs.com/package/nock)
+
 
 # Fixing permissions
 
