@@ -64,6 +64,55 @@ ex:
 	
 thats it.
 
+# Grunt
+
+Grunt is a command line node package / task runner.  It provides a way to perform tasks (like running unit tests, compiling code, getting coverage, etc.
+
+We might recommend installing grunt globally
+
+	npm install -g grunt
+	
+an alternative method is to always call the local module
+
+	node local_modules/grunt/bin/grunt gruntCommand
+	
+please note that a mac / linux command of the following could help here
+	
+	#!/bin/bash
+	LOCAL_GRUNT() {
+		#assume grunt 1.0.1
+		node node_modules/grunt/bin/grunt "$@"
+	}
+	
+### High level grunt tasks
+
+**default (called by just running `grunt`):** jsHint:src ejslint jscs:src
+
+This means that it tries to validate the src code both through jsHint ant jscs and validate the ejs express pages.
+
+**test (called by running `grunt test`):** everything under default + unit tests
+
+i.e: jshint:src","jshint:test", "ejslint", "jscs:src","jscs:test", "mochaTest"
+
+This means that it tries to validate both the test and src code (through both jsHint and jscs), validate the express ejs pages and run all unit tests
+
+**testOnly (called by running `grunt testOnly`):** mochaTest
+
+This only runs the mocha unit tests
+
+**coverage (called by running `grunt testOnly`):** everything under test + mocha_istanbul (for coverage)
+
+i.e: jshint:src","jshint:test", "ejslint", "jscs:src","jscs:test", "mochaTest", "mocha_istanbul"
+
+This verifies the code and determines the code coverage.
+
+Results are under the coverage results [coverage/lcov-report/index.html](coverage/lcov-report/index.html)
+
+**coverageOnly (called by running `grunt coverageOnly`):** just mocha_istanbul
+
+Runs the code coverage.
+
+
 # Running Unit Tests
 
 To run unit tests, run the following:
