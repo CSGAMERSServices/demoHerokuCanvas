@@ -1,8 +1,9 @@
 var helloWorld = require( '../src/helloWorld' );
+var assert = require( 'assert' );
 
 
 describe( 'Hello World', function () {
 	it( 'says hello', function () {
-		expect( helloWorld() ).toEqual('Hello world!');	
+		assert.equal( 'Hello world!', helloWorld() );
 	});
 });
