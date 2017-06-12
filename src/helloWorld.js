@@ -2,11 +2,7 @@
  * Example class that we can run a spec against
  **/
 function helloWorld(){
-	return ('Lordy that would be bad!');
+	return ('Hello world!');
 }
 
 module.exports = helloWorld;
-
-badCommit(){...@#$@#function cuca(){
-	console.log('error');
-}
