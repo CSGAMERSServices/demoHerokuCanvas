@@ -17,11 +17,11 @@ var upload = multer();
  * @param req (Request)
  * @return (String)
  **/
-function getSignedRequest(req) {
+function getSignedRequest(req){
 	var result = (process.env.EX_SIGNED_REQUEST || 'bad.signed_request');
 
 	//-- always use the request sent by body if one was sent though.
-	if (req.body && req.body.signed_request) {
+	if (req.body && req.body.signed_request){
 		console.log('req.body');
 		result = req.body.signed_request;
 	} else{
@@ -36,7 +36,7 @@ function getSignedRequest(req) {
  * @visibility - private
  * @return (String)
  */
-function getSharedSecret() {
+function getSharedSecret(){
 	return (process.env.CONSUMER_SECRET || 'bad.shared_secret');
 }
 
@@ -48,7 +48,7 @@ function getSharedSecret() {
  * @param resp (Response) - response to be returned.
  * @return (Boolean) - if the request was authorized (true) or not(false)
  */
-function checkForSignedRequest(req, resp) {
+function checkForSignedRequest(req, resp){
 
 	//-- default using the ex signed request if it is present
 	var signedRequest = getSignedRequest(req);
@@ -56,7 +56,7 @@ function checkForSignedRequest(req, resp) {
 	var secret = getSharedSecret();
 
 	var isValidRequest = validateSignedRequest(signedRequest, secret);
-	if (!isValidRequest) {
+	if (!isValidRequest){
 		resp.render('pages/error', {
 			errMsg: 'not a valid signed request',
 		});
@@ -72,11 +72,14 @@ function checkForSignedRequest(req, resp) {
  *  @param sharedSecret (String)
  *  @return boolean - true if passing false if not
 **/
-function validateSignedRequest(signedRequest, sharedSecret) {
+function validateSignedRequest(signedRequest, sharedSecret){
 
 	var matches = false;
 
-	var hashedContext, b64Hash, context, hash;
+	var hashedContext;
+	var b64Hash;
+	var context;
+	var hash;
 
 	try{
 		//-- hashed context
@@ -89,12 +92,12 @@ function validateSignedRequest(signedRequest, sharedSecret) {
 
 		matches = (hashedContext === b64Hash);
 
-	} catch (err) {
+	} catch (err){
 		console.error('error occurred while checking signed request');
 		console.error(err);
 	}
 
-	if (matches) {
+	if (matches){
 		console.log('signed_request matches');
 	} else{
 		console.error('signed_request DOES NOT MATCH' +
@@ -112,7 +115,7 @@ function validateSignedRequest(signedRequest, sharedSecret) {
  * @param sharedSecret (String)
  * @return UserInfo (Object)
  **/
-function getSignedRequestContext(req) {
+function getSignedRequestContext(req){
 	var results = {};
 
 	var signedRequest = getSignedRequest(req);

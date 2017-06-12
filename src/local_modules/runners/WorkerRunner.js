@@ -11,7 +11,7 @@ var _ = require('underscore');
  * (Null for no job)
  * @return String - the job id or null if no job
  **/
-function getAJob() {
+function getAJob(){
 	console.log('checking for job. sure!');
 
 	//-- run in an atomic manner
@@ -28,7 +28,7 @@ function getAJob() {
  * Runs the job
  * @TODO: queuable?
  **/
-function runJob() {
+function runJob(){
 
 	//-- @TODO: use q / promises?
 
@@ -52,7 +52,7 @@ function runJob() {
 /**
  *  Determines if there is a job to be run.
 **/
-module.exports = function () {
+module.exports = function (){
 	this.isRunning = false;
 	this.jobId = new Date().getTime();
 
