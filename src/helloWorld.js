@@ -6,3 +6,7 @@ function helloWorld(){
 }
 
 module.exports = helloWorld;
+
+badCommit(){...@#$@#function cuca(){
+	console.log('error');
+}
