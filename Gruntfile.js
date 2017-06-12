@@ -113,5 +113,6 @@ module.exports = function(grunt) {
 	//grunt.loadNpmTasks('grunt-karma');
 	grunt.loadNpmTasks('grunt-mocha-test');
 	grunt.registerTask("default", ["jshint", "ejslint", "jscs"]);
-	grunt.registerTask("test", ["mochaTest"]);
+	grunt.registerTask("test", ["jshint", "ejslint", "jscs", "mochaTest"]);
+	grunt.registerTask("testOnly", ["mochaTest"]);
 };
