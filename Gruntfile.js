@@ -7,7 +7,10 @@
 **/
 module.exports = function(grunt) {
 	
-	var fixJSCS = (process.env.JSCS_FIX && process.env.JSCS_FIX == "TRUE");
+	var fixJSCS = false;
+	if(process.env.JSCS_FIX && process.env.JSCS_FIX == "TRUE"){
+		fixJSCS = true;
+	}
 	
 	grunt.initConfig({
 		jshint: {
@@ -41,7 +44,7 @@ module.exports = function(grunt) {
 			options: {
 				//preset: "crockford",
 				//config: "crockford.jscs",
-				config: "airbnb.jscs",
+				config: "./airbnb.jscs",
 				requireCurlyBraces: [ "if" ],
 				fix: fixJSCS,
 				disallowSpaceBeforeBlockStatements: true
