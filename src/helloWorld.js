@@ -1,8 +1,8 @@
 /**
  * Example class that we can run a spec against
  **/
-function helloWorld() {
-	return ('Hello world!');
+function helloWorld(){
+	return ('Lordy that would be bad!');
 }
 
 module.exports = helloWorld;
