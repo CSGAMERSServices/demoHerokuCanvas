@@ -14,9 +14,30 @@ module.exports = function(grunt) {
 	
 	grunt.initConfig({
 		jshint: {
-			heroku: {
+			src: {
 				src: [
 					'src/local_modules/**/*.js'
+				],
+				exclude: [
+				],
+				directives: {
+					node: true,
+					todo: true
+				},
+				options: {
+					undef: true,
+					globals: {
+						module:true,
+						process:true,
+						console:true,
+						require:true,
+						__dirname:false
+					}
+				},
+			},
+			test: {
+				src: [
+					'tests/**/*.js'
 				],
 				exclude: [
 				],
@@ -37,17 +58,32 @@ module.exports = function(grunt) {
 			}
 		},
 		jscs: {
-			src: [
-				'src/local_modules/**/*.js',
-				'src/*.js'
-			],
-			options: {
-				//preset: "crockford",
-				//config: "crockford.jscs",
-				config: "./airbnb.jscs",
-				requireCurlyBraces: [ "if" ],
-				fix: fixJSCS,
-				disallowSpaceBeforeBlockStatements: true
+			src: {
+				src: [
+					'src/local_modules/**/*.js',
+					'src/*.js'
+				],
+				options: {
+					//preset: "crockford",
+					//config: "crockford.jscs",
+					config: "./airbnb.jscs",
+					requireCurlyBraces: [ "if" ],
+					fix: fixJSCS,
+					disallowSpaceBeforeBlockStatements: true
+				}
+			},
+			test: {
+				src: [
+					'tests/**/*.js'
+				],
+				options: {
+					//preset: "crockford",
+					//config: "crockford.jscs",
+					config: "./airbnb.jscs",
+					requireCurlyBraces: [ "if" ],
+					fix: fixJSCS,
+					disallowSpaceBeforeBlockStatements: true
+				}
 			}
 		},
 		ejslint: {
@@ -77,14 +113,14 @@ module.exports = function(grunt) {
 		watch: {
 			default: {
 				files: ['src/**/*.js'],
-				tasks: ["jshint", "ejslint", "jscs"],
+				tasks: ["jshint:src", "ejslint", "jscs:src"],
 				options: {
 					spawn: false
 				}
 			},
 			test: {
-				files: ['src/**/*.js'],
-				tasks: ["jshint", "ejslint", "jscs", "mochaTest"],
+				files: ['src/**/*.js', 'tests/**/*.js'],
+				tasks: ["jshint:src","jshint:test", "ejslint", "jscs:src","jscs:test", "mochaTest"],
 				options: {
 					spawn: false
 				}
@@ -121,9 +157,9 @@ module.exports = function(grunt) {
 	grunt.loadNpmTasks('grunt-mocha-istanbul');
 	//grunt.loadNpmTasks('grunt-karma');
 	grunt.loadNpmTasks('grunt-mocha-test');
-	grunt.registerTask("default", ["jshint", "ejslint", "jscs"]);
-	grunt.registerTask("test", ["jshint", "ejslint", "jscs", "mochaTest"]);
+	grunt.registerTask("default", ["jshint:src", "ejslint", "jscs:src"]);
+	grunt.registerTask("test", ["jshint:src","jshint:test", "ejslint", "jscs:src","jscs:test", "mochaTest"]);
 	grunt.registerTask("testOnly", ["mochaTest"]);
-	grunt.registerTask("coverage", ["jshint", "ejslint", "jscs", "mochaTest", "mocha_istanbul"]);
+	grunt.registerTask("coverage", ["jshint:src","jshint:test", "ejslint", "jscs:src","jscs:test", "mochaTest", "mocha_istanbul"]);
 	grunt.registerTask("coverageOnly", ["mochaTest", "mocha_istanbul"] );
 };
