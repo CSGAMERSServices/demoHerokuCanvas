@@ -1,4 +1,3 @@
-RawParsed
 {
     "disallowSpacesInNamedFunctionExpression": {
         "beforeOpeningRoundBrace": true
