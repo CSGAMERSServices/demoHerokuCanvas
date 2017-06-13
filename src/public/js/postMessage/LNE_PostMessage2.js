@@ -78,7 +78,7 @@ this.LNE_PostMessage.prototype.matchesPageMessage = function( pageName, messageT
  *  <p>TypeScript getMessageOrigin( evt:PostMessageEvent ):String</p>
 **/
 this.LNE_PostMessage.prototype.getMessageOrigin = function( evt ){
-	return( event.origin || event.originalEvent.origin );
+	return( evt.origin || evt.originalEvent.origin );
 };
 	
 /**
