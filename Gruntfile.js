@@ -48,9 +48,11 @@ module.exports = function(grunt) {
 				options: {
 					undef: true,
 					globals: {
+						console:true,
+						describe:true,
+						it: true,
 						module:true,
 						process:true,
-						console:true,
 						require:true,
 						__dirname:false
 					}
