@@ -30,11 +30,18 @@
 		} catch( err ){
 			console.error( "unable to set user info context" ); console.error( err );
 		}
-
+		
 		jsf = new jsforce.Connection({
 			sessionId: "<%= TOKEN %>",
 			serverUrl: "<%= INSTANCE_URL %>"
 		});
+		
+		/*
+		//-- use jsforce-ajax-proxy to make requests in the browser outside of salesforce
+		//-- but this is mostly for demonstration purposes,
+		//-- it is recommended you do this behind the scenes/server-side instead.
+		
+		https://github.com/jsforce/jsforce-ajax-proxy
 		
 		jsf.query ("select id, name from account limit 1", function( err, records ){
 			console.log( "query returned" );
@@ -43,6 +50,7 @@
 			}
 			debugger;
 		});
+		*/
 		
 		closeBtn.onclick = function( evt ){
 			console.log( 'closeBtn called' );debugger;
