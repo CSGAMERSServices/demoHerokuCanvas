@@ -164,4 +164,7 @@ module.exports = function(grunt) {
 	grunt.registerTask("testOnly", ["mochaTest"]);
 	grunt.registerTask("coverage", ["jshint:src","jshint:test", "ejslint", "jscs:src","jscs:test", "mochaTest", "mocha_istanbul"]);
 	grunt.registerTask("coverageOnly", ["mochaTest", "mocha_istanbul"] );
+	
+	grunt.registerTask('watchSrc', ['watch:src']);
+	grunt.registerTask('watchTest', ['watch:test']);
 };
