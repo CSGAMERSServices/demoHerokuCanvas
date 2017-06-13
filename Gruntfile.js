@@ -89,7 +89,10 @@ module.exports = function(grunt) {
 			}
 		},
 		ejslint: {
-			target: ['src/**/*.ejs']
+			target: ['src/**/*.ejs'],
+			options: {
+				delimiter: '%'
+			}
 		},
 		mochaTest: {
 			test: {
@@ -113,16 +116,16 @@ module.exports = function(grunt) {
 			}
 		},
 		watch: {
-			default: {
+			src: {
 				files: ['src/**/*.js'],
-				tasks: ["jshint:src", "ejslint", "jscs:src"],
+				tasks: ["default"],
 				options: {
 					spawn: false
 				}
 			},
 			test: {
-				files: ['src/**/*.js', 'tests/**/*.js'],
-				tasks: ["jshint:src","jshint:test", "ejslint", "jscs:src","jscs:test", "mochaTest"],
+				files: ['src/**/*.js', 'tests/**/*.js', 'src/**/*.ejs'],
+				tasks: ["test"],
 				options: {
 					spawn: false
 				}
